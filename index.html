@@ -52,16 +52,8 @@
          const urlInput = document.getElementById('azUrl').value.trim();
          const errorMsg = document.getElementById('azErrorMsg');
          const output = document.getElementById('azOutput');
-
-         // Clear previous messages
          errorMsg.textContent = '';
          output.textContent = '';
-
-         // Validate the input
-         if (!urlInput) {
-            errorMsg.textContent = 'Please enter a valid Amazon link';
-            return;
-         }
 
          let urlSplit = urlInput.split("?");
          let urlParts = urlSplit[0].split("/");
@@ -84,28 +76,18 @@
          const urlInput = document.getElementById('gdUrl').value.trim();
          const errorMsg = document.getElementById('gdErrorMsg');
          const output = document.getElementById('gdOutput');
-
-         // Clear previous messages
          errorMsg.textContent = '';
          output.textContent = '';
 
-         // Validate the input
-         if (!urlInput) {
-            errorMsg.textContent = 'Please enter a valid Google Drive file link (see instructions above)';
-            return;
-         }
-
          let urlSplit = urlInput.split("?");
          let urlParts = urlSplit[0].split("/");
-         urlParts.forEach((element, index) => {
-            let nugget = urlParts[index + 1].toLowerCase();
-            if (nugget == "d") {
-               output.textContent = `https://www.amazon.com/dp/${nugget}`;
-             } else {
-               errorMsg.textContent = "Please enter a valid Google Drive file link (see instructions above)";
-               output.textContent = "";
-            }
-         });
+         let index = urlParts.findIndex((element) => element.toLowerCase() == "d");
+         if (index > -1) {
+            output.textContent = `https://drive.google.com/uc?id={urlParts[index+1]}`;           
+         } else {
+            errorMsg.textContent = "Please enter a valid Google Drive file link";
+            output.textContent = "";               
+
       });
    </script>
 </body>
