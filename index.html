@@ -4,90 +4,140 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Utility Link Cleaner/Extractor</title>
+   <title>ClawDia's Simple Link Utilities</title>
+   <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet' type='text/css'>
    <style>
-      body {
-         font-family: Verdana, sans-serif;
-         margin: 20px;
+      body,
+      form,
+      span,
+      select,
+      input,
+      textarea {
+         font-family: 'Inter', sans-serif;
+         font-size: 14px;
+         margin: 5px;
       }
 
-      #output {
-         margin-top: 20px;
+      html {
+         margin: 0;
+         padding: 0;
+         width: 100%;
+      }
+
+      form,
+      body {
+         margin-left: auto;
+         margin-right: auto;
+         max-width: 900px;
+      }
+
+      form {
+         background-color: #e9e9e9;
+         border-radius: 10px;
+         padding: 20px;
+         margin-bottom: 20px;
+         margin-top: 0px;
+         box-shadow: 0 2px 10px gray;
+      }
+
+      span {
+         display: block;
+         margin: 5px 0;
+         overflow: auto;
+         padding: 0 1%;
+         width: 98%;
       }
 
       .error {
          color: red;
       }
+
+      h2 {
+         margin: 0;
+      }
+
+      input {
+         padding: 5px 8px;
+         width: 60%
+      }
    </style>
 </head>
 
 <body>
-   <h1>Clean Amazon Product Link</h1>
+   <h1 style="text-align: center">ClawDia's Simple Link Utilities</h1>
    <form id="azForm">
-      <label for="azUrl">Amazon Link:</label><br>
+      <h2>Clean Amazon Product Link</h2>
+      <p style="font-style: italic">Strips off all the unecessary junk Amazon throws on there.</p>
+      <label for="azUrl">Amazon Link:</label>
       <input type="text" id="azUrl" name="azUrl" required>
-      <button type="submit">Clean</button>
+      <button type="submit">CLEAN</button>
+      <p id="azOutput"></p>
       <p id="azErrorMsg" class="error"></p>
    </form>
-   <div id="azOutput"></div>
 
-   <h1>Convert Google Drive Link</h1>
-   <p>You'll need to dig up the "Share" link for the file:</p>
-   <ol>
-      <li>In Google Drive, locate the file</li>
-      <li>Show the file's menu by right-clicking on it (or use the three dots)</li>
-      <li>Choose Share > Copy link</li>
-   </ol>
    <form id="gdForm">
-      <label for="gdInput">Google Drive Link:</label><br>
+      <h2>Convert Google Drive Share Link</h2>
+      <p style="font-style: italic">Gets the raw file location so you can access it directly.</p>
+      <label for="gdInput">Google Drive Share Link:</label>
       <input type="text" id="gdInput" name="gdInput" required>
-      <button type="submit">Convert</button>
+      <button type="submit">CONVERT</button>
+      <p id="gdOutput"></p>
       <p id="gdErrorMsg" class="error"></p>
+      <p style="padding-top: 20px; margin-top: 30px;border-top: 1px dashed gray; font-style: italic">To find the Share link for a Google Drive file:</p>
+      <ol style="font-style: italic">
+         <li>Go to Google Drive and find the file (don't open it)</li>
+         <li>Right-click on it (or click the three dots)</li>
+         <li>Choose Share > Copy link, and paste it in</li>
+      </ol>
    </form>
-   <div id="gdOutput"></div>
 
-    <script>
-      document.getElementById('azForm').addEventListener('submit', function (event) {
+   <script>
+      function processLink(event, params) {
          event.preventDefault();
-         const urlInput = document.getElementById('azUrl').value.trim();
-         const errorMsg = document.getElementById('azErrorMsg');
-         const output = document.getElementById('azOutput');
+         const urlInput = document.getElementById(params.url).value.trim();
+         const errorMsg = document.getElementById(params.error);
+         const output = document.getElementById(params.output);
          errorMsg.textContent = '';
          output.textContent = '';
 
          let urlSplit = urlInput.split("?");
          let urlParts = urlSplit[0].split("/");
-         let index = urlParts.findIndex((element) => element.toLowerCase() == "dp");
+         let index = urlParts.findIndex((element) => element.toLowerCase() == params.idCue1);
          if (index > -1) {
-            output.textContent = `https://www.amazon.com/dp/${urlParts[index+1]}`;           
+            output.textContent = `${params.result1}${urlParts[index + 1]}`;
          } else {
-            found = urlParts.findIndex((element) => element == "gp");
+            found = params.idCue2 ? urlParts.findIndex((element) => element == params.idCue2) : -1;
             if (index > -1) {
-               output.textContent = `https://www.amazon.com/gp/product${urlParts[index+1]}`;           
+               output.textContent = `${params.result2}${urlParts[index + 1]}`;
             } else {
-               errorMsg.textContent = "Please enter a valid Amazon link";
-               output.textContent = "";               
+               errorMsg.textContent = "Please enter a valid link";
+               output.textContent = "";
             }
          }
+      }
+
+      document.getElementById('azForm').addEventListener('submit', function (event) {
+         params = {
+            url: 'azUrl',
+            error: 'azErrorMsg',
+            output: 'azOutput',
+            idCue1: 'dp',
+            result1: 'https://www.amazon.com/dp/',
+            idCue2: 'gp',
+            result2: 'https://www.amazon.com/gp/product/',
+         }
+         processLink(event, params);
       });
 
       document.getElementById('gdForm').addEventListener('submit', function (event) {
-         event.preventDefault();
-         const urlInput = document.getElementById('gdInput').value.trim();
-         const errorMsg = document.getElementById('gdErrorMsg');
-         const output = document.getElementById('gdOutput');
-         errorMsg.textContent = '';
-         output.textContent = '';
-
-         let urlSplit = urlInput.split("?");
-         let urlParts = urlSplit[0].split("/");
-         let index = urlParts.findIndex((element) => element.toLowerCase() == "d");
-         if (index > -1) {
-            output.textContent = `https://drive.google.com/uc?id=${urlParts[index+1]}`;           
-         } else {
-            errorMsg.textContent = "Please enter a valid Google Drive file link";
-            output.textContent = "";               
-         }
+         params = {
+            url: 'gdInput',
+            error: 'gdErrorMsg',
+            output: 'gdOutput',
+            idCue1: 'd',
+            result1: 'https://drive.google.com/uc?id='
+         };
+         processLink(event, params);
       });
    </script>
 </body>
