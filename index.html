@@ -47,10 +47,6 @@
    <div id="gdOutput"></div>
 
     <script>
-   // https://drive.google.com/file/d/1aBnR1QDVKwkhq-f7FDEq4b3uatGQH4RN/view?usp=drive_link
-   // https://drive.google.com/file/d/1yVowPs5q6l6hUcuSxWv7p-qx7WMmo-hi/view?usp=drive_link
-   // https://drive.google.com/file/d/id/view?usp=sharing
-   // https://drive.google.com/uc?id=XXX
       document.getElementById('azForm').addEventListener('submit', function (event) {
          event.preventDefault();
          const urlInput = document.getElementById('azUrl').value.trim();
@@ -69,13 +65,13 @@
 
          let urlSplit = urlInput.split("?");
          let urlParts = urlSplit[0].split("/");
-         let found = urlParts.find((element) => element.toLowerCase() == "dp");
-         if (found) {
-            output.textContent = `https://www.amazon.com/dp/${nugget.toLowerCase()}`;           
+         let id = urlParts.find((element) => element.toLowerCase() == "dp");
+         if (id) {
+            output.textContent = `https://www.amazon.com/dp/${id}`;           
          } else {
             found = urlParts.find((element) => element == "gp");
             if (found) {
-               output.textContent = `https://www.amazon.com/gp/product${nugget.toLowerCase()}`;           
+               output.textContent = `https://www.amazon.com/gp/product${id}`;           
             } else {
                errorMsg.textContent = "Please enter a valid Amazon link";
                output.textContent = "";               
