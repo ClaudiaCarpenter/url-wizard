@@ -38,7 +38,7 @@
             }
 
             let urlSplit = urlInput.split("?");
-            let urlParts = urlInput.split("/");
+            let urlParts = urlSplit[0].split("/");
             urlParts.forEach(element, index => {
                if (element.tolowerCase() == "dp" || element.tolowerCase() == "gp") {
                   output.textContent = `Extracted part: ${element[index+1]}`; 
@@ -58,42 +58,3 @@
     </script>
 </body>
 </html>
-
-
-<!--
-script>
-   function stripAmazon(url) {
-      const pattern = /https:\/\/www\.amazon\.com\/([gd]p\/[A-z0-9]{10})/;
-      let m = url.match(r);
-
-      const match = url.match(pattern);
-      if (match) { // Extracted part of the URL 
-         const extractedPart = match[1];
-         console.log(`Extracted part: ${extractedPart}`);
-      } else {
-         console.log("No match found.");
-      }
-
-      return m;
-   }
-
-   function testAmazon() {
-      let test = "https://www.amazon.com/Anthonys-Premium-White-Gluten-Unbleached/dp/B094TDJ1DF?crid=2N12NEW9CFQNO&dib=eyJ2IjoiMSJ9.RkNupzLz_rD83dZcorArRn1gU-TiN7G6Ybj7YZuAuQtuMVle65ojO0R9FzPa5n5VYBuweHrFmd4oI7NHLNe43j4E3d7vu0MBcjXIpYC9V_ZNdklgsTybbam_NBywusDCM9mqudK3EqQJK_nLXBZH5Oe9XasWMn4vmE3tufCmKwELZqTVV7EACEGHDS52Opr6CbdE9FJNWRLUcLHAliKZfoJpV83_4d2ky7TtTRScLTEnxrfuoZCJj1p3wBWj5lYWcX7LX97T8ZyS0llY9xjO10GC2VwufFFEWMmWzxx1UiF6X0oq0wYytXNpnTzUhTb53V5gOa_tKhTVnUYCogdumNRm5Ku3FSYEmQjLbabcczC8vUuPuQcZutSLUI5DFKyVS42viO1Prrf53_wCHHnvfhLDQ-QFskYJ_6KqmyNtK5EJaZvgeMXnFkcKvb0i0IL6.d6wuRIXDuDAO0gxO-cYgJw2wzhy1HyQlILbYJLaywvc&dib_tag=se&keywords=white+rice+flour&qid=1734569591&sprefix=white+rice+flour%2Caps%2C177&sr=8-5";
-      console.log(stripAmazon(test));
-   }
-</script>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-   <title>URL Wizard</title>
-   <script>testAmazon();</script>
-</head>
-
-<body>
-   <h1>Welcome to my website! ⭐️</h1>
-   <p>How was your day? 🎉</p>
-</body>
-
-</html -->
