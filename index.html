@@ -1,60 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Extractor</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        #output { margin-top: 20px; }
-        .error { color: red; }
-    </style>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Utility Link Cleaner/Extractor</title>
+   <style>
+      body {
+         font-family: Verdana, sans-serif;
+         margin: 20px;
+      }
+
+      #output {
+         margin-top: 20px;
+      }
+
+      .error {
+         color: red;
+      }
+   </style>
 </head>
+
 <body>
-    <h1>URL Extractor</h1>
-    <form id="urlForm">
-        <label for="urlInput">Enter Amazon URL:</label><br>
-        <input type="text" id="urlInput" name="urlInput" required>
-        <button type="submit">Extract</button>
-        <p id="errorMsg" class="error"></p>
-    </form>
-    <div id="output"></div>
+   <h1>Clean Amazon Product Link</h1>
+   <form id="azForm">
+      <label for="azUrl">Amazon Link:</label><br>
+      <input type="text" id="azUrl" name="azUrl" required>
+      <button type="submit">Clean</button>
+      <p id="azErrorMsg" class="error"></p>
+   </form>
+   <div id="azOutput"></div>
+
+   <h1>Convert Google Drive Link</h1>
+   <p>You'll need to dig up the "Share" link for the file:</p>
+   <ol>
+      <li>In Google Drive, locate the file</li>
+      <li>Show the file's menu by right-clicking on it (or use the three dots)</li>
+      <li>Choose Share > Copy link</li>
+   </ol>
+   <form id="gdForm">
+      <label for="gdInput">Google Drive Link:</label><br>
+      <input type="text" id="gdInput" name="gdInput" required>
+      <button type="submit">Convert</button>
+      <p id="gdErrorMsg" class="error"></p>
+   </form>
+   <div id="gdOutput"></div>
 
     <script>
-        document.getElementById('urlForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const urlInput = document.getElementById('urlInput').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
-            const output = document.getElementById('output');
+   // https://drive.google.com/file/d/1aBnR1QDVKwkhq-f7FDEq4b3uatGQH4RN/view?usp=drive_link
+   // https://drive.google.com/file/d/1yVowPs5q6l6hUcuSxWv7p-qx7WMmo-hi/view?usp=drive_link
+   // https://drive.google.com/file/d/id/view?usp=sharing
+   // https://drive.google.com/uc?id=XXX
+      document.getElementById('azForm').addEventListener('submit', function (event) {
+         event.preventDefault();
+         const urlInput = document.getElementById('azUrl').value.trim();
+         const errorMsg = document.getElementById('azErrorMsg');
+         const output = document.getElementById('azOutput');
 
-            // Clear previous messages
-            errorMsg.textContent = '';
-            output.textContent = '';
+         // Clear previous messages
+         errorMsg.textContent = '';
+         output.textContent = '';
 
-            // Validate the input
-            if (!urlInput) {
-                errorMsg.textContent = 'Please enter a URL.';
-                return;
+         // Validate the input
+         if (!urlInput) {
+            errorMsg.textContent = 'Please enter a valid Amazon link';
+            return;
+         }
+
+         let urlSplit = urlInput.split("?");
+         let urlParts = urlSplit[0].split("/");
+         let found = urlParts.find((element) => element.toLowerCase() == "dp");
+         if (found) {
+            output.textContent = `https://www.amazon.com/dp/${nugget.toLowerCase()}`;           
+         } else {
+            found = urlParts.find((element) => element == "gp");
+            if (found) {
+               output.textContent = `https://www.amazon.com/gp/product${nugget.toLowerCase()}`;           
+            } else {
+               errorMsg.textContent = "Please enter a valid Amazon link";
+               output.textContent = "";               
             }
+         }
+      });
 
-            let urlSplit = urlInput.split("?");
-            let urlParts = urlSplit[0].split("/");
-            urlParts.forEach((element, index) => {
-               if (element.toLowerCase() == "dp" || element.toLowerCase() == "gp") {
-                  output.textContent = `Extracted part: ${urlParts[index+1]}`; 
-               }
-            });
+      document.getElementById('gdForm').addEventListener('submit', function (event) {
+         event.preventDefault();
+         const urlInput = document.getElementById('gdUrl').value.trim();
+         const errorMsg = document.getElementById('gdErrorMsg');
+         const output = document.getElementById('gdOutput');
 
-            // const pattern = /https:\/\/www\.amazon\.com\/([gd]p\/[A-z0-9]{10})/;
-            // const match = urlInput.match(pattern);
+         // Clear previous messages
+         errorMsg.textContent = '';
+         output.textContent = '';
 
-            // if (match) {
-            //     const extractedPart = match[1];
-            //     output.textContent = `Extracted part: ${extractedPart}`;
-            // } else {
-            //     errorMsg.textContent = 'The URL is not well-formed or does not match the expected pattern.';
-            // }
-        });
-    </script>
+         // Validate the input
+         if (!urlInput) {
+            errorMsg.textContent = 'Please enter a valid Google Drive file link (see instructions above)';
+            return;
+         }
+
+         let urlSplit = urlInput.split("?");
+         let urlParts = urlSplit[0].split("/");
+         urlParts.forEach((element, index) => {
+            let nugget = urlParts[index + 1].toLowerCase();
+            if (nugget == "d") {
+               output.textContent = `https://www.amazon.com/dp/${nugget}`;
+             } else {
+               errorMsg.textContent = "Please enter a valid Google Drive file link (see instructions above)";
+               output.textContent = "";
+            }
+         });
+      });
+   </script>
 </body>
+
 </html>
