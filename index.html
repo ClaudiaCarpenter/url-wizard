@@ -83,7 +83,7 @@
          let urlParts = urlSplit[0].split("/");
          let index = urlParts.findIndex((element) => element.toLowerCase() == "d");
          if (index > -1) {
-            output.textContent = `https://drive.google.com/uc?id={urlParts[index+1]}`;           
+            output.textContent = `https://drive.google.com/uc?id=${urlParts[index+1]}`;           
          } else {
             errorMsg.textContent = "Please enter a valid Google Drive file link";
             output.textContent = "";               
