@@ -37,7 +37,8 @@
                 return;
             }
 
-            let urlParts = urlInput.split("?");
+            let urlSplit = urlInput.split("?");
+            let urlParts = urlInput.split("/");
             urlParts.forEach(element, index => {
                if (element.tolowerCase() == "dp" || element.tolowerCase() == "gp") {
                   output.textContent = `Extracted part: ${element[index+1]}`; 
